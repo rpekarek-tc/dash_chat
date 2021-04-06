@@ -1,13 +1,13 @@
 part of dash_chat;
 
-class ChatInputToolbar extends StatelessWidget {
+class AutoCompleteChatInputToolbar extends StatelessWidget {
   final TextEditingController controller;
   final TextStyle inputTextStyle;
   final InputDecoration inputDecoration;
   final TextCapitalization textCapitalization;
   final BoxDecoration inputContainerStyle;
   final List<Widget> leading;
-  final List<Widget> trailling;
+  final List<Widget> trailing;
   final int inputMaxLines;
   final int maxInputLength;
   final bool alwaysShowSend;
@@ -19,7 +19,6 @@ class ChatInputToolbar extends StatelessWidget {
   final String Function() messageIdGenerator;
   final Widget Function(Function) sendButtonBuilder;
   final Widget Function() inputFooterBuilder;
-  final bool showInputCursor;
   final double inputCursorWidth;
   final Color inputCursorColor;
   final ScrollController scrollController;
@@ -31,26 +30,29 @@ class ChatInputToolbar extends StatelessWidget {
   final bool sendOnEnter;
   final bool reverse;
   final TextInputAction textInputAction;
+  final SuggestionsCallback<ChatUser> getMentionSuggestions;
+  final Widget Function(BuildContext, ChatUser) mentionSuggestionBuilder;
 
-  ChatInputToolbar({
+  AutoCompleteChatInputToolbar({
     Key key,
     this.textDirection = TextDirection.ltr,
     this.focusNode,
     this.scrollController,
     this.text,
+    @required this.getMentionSuggestions,
+    @required this.mentionSuggestionBuilder,
     this.textInputAction,
     this.sendOnEnter = false,
     this.onTextChange,
     this.inputDisabled = false,
     this.controller,
     this.leading = const [],
-    this.trailling = const [],
+    this.trailing = const [],
     this.inputDecoration,
     this.textCapitalization,
     this.inputTextStyle,
     this.inputContainerStyle,
     this.inputMaxLines = 1,
-    this.showInputCursor = true,
     this.maxInputLength,
     this.inputCursorWidth = 2.0,
     this.inputCursorColor,
@@ -68,6 +70,7 @@ class ChatInputToolbar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    List<ChatUser> noSuggestions = [];
     ChatMessage message = ChatMessage(
       text: text,
       user: user,
@@ -80,7 +83,7 @@ class ChatInputToolbar extends StatelessWidget {
       margin: inputToolbarMargin,
       decoration: inputContainerStyle != null
           ? inputContainerStyle
-          : BoxDecoration(color: Colors.white),
+          : BoxDecoration(color: Colors.transparent),
       child: Column(
         children: <Widget>[
           Row(
@@ -93,45 +96,70 @@ class ChatInputToolbar extends StatelessWidget {
                   padding: const EdgeInsets.symmetric(horizontal: 8.0),
                   child: Directionality(
                     textDirection: textDirection,
-                    child: TextField(
-                      focusNode: focusNode,
-                      onChanged: (value) {
-                        onTextChange(value);
+                    child: TypeAheadField<ChatUser>(
+                      direction: AxisDirection.up,
+                      hideOnEmpty: true,
+                      hideSuggestionsOnKeyboardHide: true,
+                      onSuggestionSelected: (suggestion) {
+                        int cursor = controller.value.selection.base.offset;
+                        int lastAtSymbol = controller.text
+                            .substring(0, cursor)
+                            .lastIndexOf('@');
+                        if (lastAtSymbol < 0) return;
+                        controller.text = controller.text.replaceRange(
+                            lastAtSymbol, cursor, '@${suggestion.name}');
                       },
-                      onSubmitted: (value) {
-                        if (sendOnEnter) {
-                          _sendMessage(context, message);
+                      suggestionsCallback: (String pattern) {
+                        int cursor = controller.value.selection.base.offset;
+                        int lastAtSymbol =
+                            (pattern.substring(0, cursor) ?? pattern)
+                                .lastIndexOf('@');
+                        if (lastAtSymbol < 0) return noSuggestions;
+                        if (lastAtSymbol != 0) {
+                          int lastSpace =
+                              (pattern.substring(lastAtSymbol, cursor) ??
+                                      pattern)
+                                  .lastIndexOf(' ');
+                          if (lastSpace > 0) return noSuggestions;
                         }
+                        return getMentionSuggestions?.call(
+                                pattern.substring(lastAtSymbol, cursor)) ??
+                            noSuggestions;
                       },
-                      textInputAction: textInputAction,
-                      buildCounter: (
-                        BuildContext context, {
-                        int currentLength,
-                        int maxLength,
-                        bool isFocused,
-                      }) =>
-                          null,
-                      decoration: inputDecoration != null
-                          ? inputDecoration
-                          : InputDecoration.collapsed(
-                              hintText: "",
-                              fillColor: Colors.white,
-                            ),
-                      textCapitalization: textCapitalization,
-                      controller: controller,
-                      style: inputTextStyle,
-                      maxLength: maxInputLength,
-                      minLines: 1,
-                      maxLines: inputMaxLines,
-                      showCursor: showInputCursor,
-                      cursorColor: inputCursorColor,
-                      cursorWidth: inputCursorWidth,
-                      enabled: !inputDisabled,
+                      itemBuilder: mentionSuggestionBuilder,
+                      textFieldConfiguration: TextFieldConfiguration(
+                        focusNode: focusNode,
+                        onChanged: (value) {
+                          onTextChange(value);
+                        },
+                        onSubmitted: (value) {
+                          if (sendOnEnter) {
+                            _sendMessage(context, message);
+                          }
+                        },
+                        keyboardType: TextInputType.multiline,
+                        textInputAction: textInputAction,
+                        decoration: inputDecoration != null
+                            ? inputDecoration
+                            : InputDecoration.collapsed(
+                                hintText: "",
+                                fillColor: Colors.white,
+                              ),
+                        textCapitalization: textCapitalization,
+                        controller: controller,
+                        style: inputTextStyle,
+                        maxLength: maxInputLength,
+                        minLines: 1,
+                        maxLines: 10,
+                        cursorColor: inputCursorColor,
+                        cursorWidth: inputCursorWidth,
+                        enabled: !inputDisabled,
+                      ),
                     ),
                   ),
                 ),
               ),
-              if (showTraillingBeforeSend) ...trailling,
+              if (showTraillingBeforeSend) ...trailing,
               if (sendButtonBuilder != null)
                 sendButtonBuilder(() async {
                   if (text.length != 0) {
@@ -149,7 +177,7 @@ class ChatInputToolbar extends StatelessWidget {
                       ? () => _sendMessage(context, message)
                       : null,
                 ),
-              if (!showTraillingBeforeSend) ...trailling,
+              if (!showTraillingBeforeSend) ...trailing,
             ],
           ),
           if (inputFooterBuilder != null) inputFooterBuilder()

@@ -170,9 +170,6 @@ class DashChat extends StatefulWidget {
   /// Max length of the input lines default to 1.
   final int inputMaxLines;
 
-  /// Should the input cursor be shown defaults to true.
-  final bool showInputCursor;
-
   /// Width of the text input defaults to 2.0.
   final double inputCursorWidth;
 
@@ -210,7 +207,7 @@ class DashChat extends StatefulWidget {
   /// Should quick reply be horizontally scrollable
   final bool quickReplyScroll;
 
-  /// Should the [trailling] Widgets be shown before the send button
+  /// Should the [trailing] Widgets be shown before the send button
   /// As default it will be shown before the send button.
   final bool showTraillingBeforeSend;
 
@@ -273,6 +270,14 @@ class DashChat extends StatefulWidget {
   /// return BoxDecoration
   final BoxDecoration Function(ChatMessage, bool) messageDecorationBuilder;
 
+  ///overrides the default scroll physics of the chatview
+  ///
+  /// Defaults to `BouncingScrollPhysics`
+  final ScrollPhysics physics;
+
+  final SuggestionsCallback<ChatUser> getMentionSuggestions;
+  final Widget Function(BuildContext, ChatUser) mentionSuggestionBuilder;
+
   ScrollToBottomStyle scrollToBottomStyle;
 
   DashChat({
@@ -303,7 +308,6 @@ class DashChat extends StatefulWidget {
     this.scrollController,
     this.inputCursorColor,
     this.inputCursorWidth = 2.0,
-    this.showInputCursor = true,
     this.inputMaxLines = 1,
     this.inputContainerStyle,
     this.inputTextStyle,
@@ -311,6 +315,8 @@ class DashChat extends StatefulWidget {
     this.trailing = const <Widget>[],
     this.messageContainerDecoration,
     this.messageContainerFlex = 1,
+    @required this.getMentionSuggestions,
+    @required this.mentionSuggestionBuilder,
     this.height,
     this.width,
     this.readOnly = false,
@@ -351,6 +357,7 @@ class DashChat extends StatefulWidget {
     this.messagePadding = const EdgeInsets.all(8.0),
     this.textBeforeImage = true,
     this.messageDecorationBuilder,
+    this.physics = const BouncingScrollPhysics(),
   }) : super(key: key) {
     this.scrollToBottomStyle = scrollToBottomStyle ?? new ScrollToBottomStyle();
   }
@@ -358,6 +365,9 @@ class DashChat extends StatefulWidget {
   String getVal() {
     return text;
   }
+
+  static DashChatState of(BuildContext context) =>
+      context.findAncestorStateOfType<DashChatState>();
 
   @override
   DashChatState createState() => DashChatState();
@@ -380,9 +390,9 @@ class DashChatState extends State<DashChat> {
     if (visible) {
       changeVisible(false);
     }
-    setState(() {
-      this._text = text;
-    });
+    //setState(() {
+    this._text = text;
+    //});
   }
 
   void changeVisible(bool value) {
@@ -481,42 +491,43 @@ class DashChatState extends State<DashChat> {
                     : MainAxisAlignment.end,
                 children: <Widget>[
                   MessageListView(
-                    avatarMaxSize: widget.avatarMaxSize,
-                    messagePadding: widget.messagePadding,
-                    constraints: constraints,
-                    shouldShowLoadEarlier: widget.shouldShowLoadEarlier,
-                    showLoadEarlierWidget: widget.showLoadEarlierWidget,
-                    onLoadEarlier: widget.onLoadEarlier,
-                    defaultLoadCallback: changeDefaultLoadMore,
-                    messageContainerPadding: widget.messageContainerPadding,
-                    scrollController: widget.scrollController != null
-                        ? widget.scrollController
-                        : scrollController,
-                    user: widget.user,
-                    messages: widget.messages,
-                    showuserAvatar: widget.showUserAvatar,
-                    dateFormat: widget.dateFormat,
-                    timeFormat: widget.timeFormat,
-                    inverted: widget.inverted,
-                    showAvatarForEverMessage: widget.showAvatarForEveryMessage,
-                    onLongPressAvatar: widget.onLongPressAvatar,
-                    onPressAvatar: widget.onPressAvatar,
-                    onLongPressMessage: widget.onLongPressMessage,
-                    avatarBuilder: widget.avatarBuilder,
-                    messageBuilder: widget.messageBuilder,
-                    messageTextBuilder: widget.messageTextBuilder,
-                    messageImageBuilder: widget.messageImageBuilder,
-                    messageTimeBuilder: widget.messageTimeBuilder,
-                    dateBuilder: widget.dateBuilder,
-                    messageContainerDecoration:
-                        widget.messageContainerDecoration,
-                    parsePatterns: widget.parsePatterns,
-                    changeVisible: changeVisible,
-                    visible: visible,
-                    showLoadMore: showLoadMore,
-                    messageButtonsBuilder: widget.messageButtonsBuilder,
-                    messageDecorationBuilder: widget.messageDecorationBuilder
-                  ),
+                      avatarMaxSize: widget.avatarMaxSize,
+                      messagePadding: widget.messagePadding,
+                      constraints: constraints,
+                      shouldShowLoadEarlier: widget.shouldShowLoadEarlier,
+                      showLoadEarlierWidget: widget.showLoadEarlierWidget,
+                      onLoadEarlier: widget.onLoadEarlier,
+                      defaultLoadCallback: changeDefaultLoadMore,
+                      messageContainerPadding: widget.messageContainerPadding,
+                      scrollController: widget.scrollController != null
+                          ? widget.scrollController
+                          : scrollController,
+                      user: widget.user,
+                      messages: widget.messages,
+                      showUserAvatar: widget.showUserAvatar,
+                      dateFormat: widget.dateFormat,
+                      timeFormat: widget.timeFormat,
+                      inverted: widget.inverted,
+                      showAvatarForEverMessage:
+                          widget.showAvatarForEveryMessage,
+                      onLongPressAvatar: widget.onLongPressAvatar,
+                      onPressAvatar: widget.onPressAvatar,
+                      onLongPressMessage: widget.onLongPressMessage,
+                      avatarBuilder: widget.avatarBuilder,
+                      messageBuilder: widget.messageBuilder,
+                      messageTextBuilder: widget.messageTextBuilder,
+                      messageImageBuilder: widget.messageImageBuilder,
+                      messageTimeBuilder: widget.messageTimeBuilder,
+                      dateBuilder: widget.dateBuilder,
+                      messageContainerDecoration:
+                          widget.messageContainerDecoration,
+                      parsePatterns: widget.parsePatterns,
+                      changeVisible: changeVisible,
+                      visible: visible,
+                      showLoadMore: showLoadMore,
+                      messageButtonsBuilder: widget.messageButtonsBuilder,
+                      messageDecorationBuilder:
+                          widget.messageDecorationBuilder),
                   if (widget.messages.length != 0 &&
                       widget.messages.last.user.uid != widget.user.uid &&
                       widget.messages.last.quickReplies != null)
@@ -552,8 +563,11 @@ class DashChatState extends State<DashChat> {
                     widget.chatFooterBuilder(),
                   if (!widget.readOnly)
                     SafeArea(
-                      child: ChatInputToolbar(
+                      child: AutoCompleteChatInputToolbar(
                         key: inputKey,
+                        mentionSuggestionBuilder:
+                            widget.mentionSuggestionBuilder,
+                        getMentionSuggestions: widget.getMentionSuggestions,
                         sendOnEnter: widget.sendOnEnter,
                         textInputAction: widget.textInputAction,
                         inputToolbarPadding: widget.inputToolbarPadding,
@@ -575,13 +589,12 @@ class DashChatState extends State<DashChat> {
                             : onTextChange,
                         inputDisabled: widget.inputDisabled,
                         leading: widget.leading,
-                        trailling: widget.trailing,
+                        trailing: widget.trailing,
                         inputContainerStyle: widget.inputContainerStyle,
                         inputTextStyle: widget.inputTextStyle,
                         inputFooterBuilder: widget.inputFooterBuilder,
                         inputCursorColor: widget.inputCursorColor,
                         inputCursorWidth: widget.inputCursorWidth,
-                        showInputCursor: widget.showInputCursor,
                         alwaysShowSend: widget.alwaysShowSend,
                         scrollController: widget.scrollController != null
                             ? widget.scrollController
