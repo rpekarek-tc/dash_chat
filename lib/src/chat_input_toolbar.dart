@@ -52,7 +52,7 @@ class AutoCompleteChatInputToolbar extends StatelessWidget {
     this.textCapitalization,
     this.inputTextStyle,
     this.inputContainerStyle,
-    this.inputMaxLines = 10,
+    this.inputMaxLines = 1,
     this.maxInputLength,
     this.inputCursorWidth = 2.0,
     this.inputCursorColor,

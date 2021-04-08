@@ -308,7 +308,7 @@ class DashChat extends StatefulWidget {
     this.scrollController,
     this.inputCursorColor,
     this.inputCursorWidth = 2.0,
-    this.inputMaxLines = 1,
+    this.inputMaxLines = 10,
     this.inputContainerStyle,
     this.inputTextStyle,
     this.leading = const <Widget>[],
@@ -366,9 +366,6 @@ class DashChat extends StatefulWidget {
     return text;
   }
 
-  static DashChatState of(BuildContext context) =>
-      context.findAncestorStateOfType<DashChatState>();
-
   @override
   DashChatState createState() => DashChatState();
 }
@@ -391,6 +388,7 @@ class DashChatState extends State<DashChat> {
     if (visible) {
       changeVisible(false);
     }
+    widget.onTextChange?.call(text);
     setState(() {
       this._text = text;
     });
@@ -585,9 +583,7 @@ class DashChatState extends State<DashChat> {
                         maxInputLength: widget.maxInputLength,
                         sendButtonBuilder: widget.sendButtonBuilder,
                         text: widget.text != null ? widget.text : _text,
-                        onTextChange: widget.onTextChange != null
-                            ? widget.onTextChange
-                            : onTextChange,
+                        onTextChange: onTextChange,
                         inputDisabled: widget.inputDisabled,
                         leading: widget.leading,
                         trailing: widget.trailing,
