@@ -382,6 +382,7 @@ class DashChatState extends State<DashChat> {
   GlobalKey inputKey = GlobalKey();
   double height = 48.0;
   bool showLoadMore = false;
+
   String get messageInput => _text;
   bool _initialLoad = true;
   Timer _timer;
@@ -390,9 +391,9 @@ class DashChatState extends State<DashChat> {
     if (visible) {
       changeVisible(false);
     }
-    //setState(() {
-    this._text = text;
-    //});
+    setState(() {
+      this._text = text;
+    });
   }
 
   void changeVisible(bool value) {
