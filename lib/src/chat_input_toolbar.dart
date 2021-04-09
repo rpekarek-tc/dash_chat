@@ -101,7 +101,6 @@ class AutoCompleteChatInputToolbar extends StatelessWidget {
                       hideOnEmpty: true,
                       hideSuggestionsOnKeyboardHide: true,
                       onSuggestionSelected: (suggestion) {
-                        focusNode.requestFocus();
                         int cursor = controller.value.selection.base.offset;
                         int lastAtSymbol = controller.text
                             .substring(0, cursor)
