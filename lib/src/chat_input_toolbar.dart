@@ -100,8 +100,7 @@ class AutoCompleteChatInputToolbar extends StatelessWidget {
                       direction: AxisDirection.up,
                       hideOnEmpty: true,
                       keepSuggestionsOnSuggestionSelected: true,
-                      hideSuggestionsOnKeyboardHide:
-                          false, //Attempting fix mentioned here: https://github.com/AbdulRahmanAlHamali/flutter_typeahead/issues/278
+                      hideSuggestionsOnKeyboardHide: false,
                       onSuggestionSelected: (suggestion) {
                         int cursor = controller.value.selection.base.offset;
                         int lastAtSymbol = controller.text
@@ -126,6 +125,7 @@ class AutoCompleteChatInputToolbar extends StatelessWidget {
                       },
                       suggestionsCallback: (String pattern) {
                         int cursor = controller.value.selection.base.offset;
+                        if (cursor < 0) return noSuggestions;
                         int lastAtSymbol =
                             (pattern.substring(0, cursor) ?? pattern)
                                 .lastIndexOf('@');
