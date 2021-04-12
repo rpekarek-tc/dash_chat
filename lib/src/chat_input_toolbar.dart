@@ -107,7 +107,7 @@ class AutoCompleteChatInputToolbar extends StatelessWidget {
                             .substring(0, cursor)
                             .lastIndexOf('@');
                         if (lastAtSymbol < 0) return;
-                        FocusScope.of(context).requestFocus(focusNode);
+                        // FocusScope.of(context).requestFocus(focusNode); //This prevents suggestion box from being shown again
                         controller.text = controller.text.replaceRange(
                             lastAtSymbol, cursor, '@${suggestion.name} ');
                         controller.selection = TextSelection.fromPosition(
