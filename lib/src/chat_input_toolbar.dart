@@ -108,13 +108,20 @@ class AutoCompleteChatInputToolbar extends StatelessWidget {
                             .substring(0, cursor)
                             .lastIndexOf('@');
                         if (lastAtSymbol < 0) return;
-                        controller.text = controller.text.replaceRange(
+
+                        int newCursorPos =
+                            lastAtSymbol + suggestion.name.length + 1;
+                        String newText = controller.text.replaceRange(
                             lastAtSymbol, cursor, '@${suggestion.name} ');
-                        controller.selection = TextSelection.fromPosition(
-                            TextPosition(
-                                offset:
-                                    lastAtSymbol + suggestion.name.length + 1));
-                        onTextChange?.call(controller.text);
+                        TextSelection newSelection = controller.selection
+                            .copyWith(
+                                baseOffset: newCursorPos,
+                                extentOffset: newCursorPos);
+
+                        controller.value = controller.value
+                            .copyWith(text: newText, selection: newSelection);
+
+                        onTextChange?.call(newText);
                       },
                       suggestionsCallback: (String pattern) {
                         int cursor = controller.value.selection.base.offset;
