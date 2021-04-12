@@ -122,7 +122,12 @@ class _MessageListViewState extends State<MessageListView> {
     final itemCount = widget.messages.length;
     return Flexible(
       child: GestureDetector(
-        onTap: () => FocusScope.of(context).requestFocus(FocusNode()),
+        onTap: () {
+          final currentFocus = FocusScope.of(context);
+          if (!currentFocus.hasPrimaryFocus && currentFocus.hasFocus) {
+            FocusManager.instance.primaryFocus.unfocus();
+          }
+        },
         child: Padding(
           padding: widget.messageContainerPadding,
           child: NotificationListener<ScrollNotification>(
