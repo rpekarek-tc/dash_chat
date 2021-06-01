@@ -1,4 +1,4 @@
-# This is Gloo's Fork of [Dash Chat]( pub.dev/packages/dash_chat )
+# This is Gloo's Fork of [Dash Chat](https://pub.dev/packages/dash_chat)
 Please see [our docs](https://www.notion.so/teamgloo/Dash-Chat-757e2737569a4573a98b76e76b3ff24d) for how to contribute.
 
 ---
