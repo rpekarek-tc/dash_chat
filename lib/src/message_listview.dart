@@ -96,7 +96,8 @@ class _MessageListViewState extends State<MessageListView> {
         widget.changeVisible(true);
       }
     }
-    return true;
+    // This was originally returning `true`, which suppresses scroll events from bubbling up.  We are flipping it to `false` so that we can wrap `DashChat` in a `RefreshIndicator`.  An issue is filed here to help us track context around this: https://github.com/fayeed/dash_chat/issues/175
+    return false;
   }
 
   bool shouldShowAvatar(int index) {
