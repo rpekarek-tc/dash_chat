@@ -36,6 +36,7 @@ class MessageListView extends StatefulWidget {
   final bool textBeforeImage;
   final double avatarMaxSize;
   final BoxDecoration Function(ChatMessage, bool) messageDecorationBuilder;
+  final ScrollPhysics scrollPhysics;
 
   MessageListView({
     this.showLoadEarlierWidget,
@@ -74,6 +75,7 @@ class MessageListView extends StatefulWidget {
     this.messagePadding = const EdgeInsets.all(8.0),
     this.textBeforeImage = true,
     this.messageDecorationBuilder,
+    this.scrollPhysics = const AlwaysScrollableScrollPhysics(),
   });
 
   @override
@@ -138,6 +140,7 @@ class _MessageListViewState extends State<MessageListView> {
               children: [
                 ListView.builder(
                   controller: widget.scrollController,
+                  physics: widget.scrollPhysics,
                   keyboardDismissBehavior:
                       ScrollViewKeyboardDismissBehavior.onDrag,
                   shrinkWrap: true,
