@@ -486,7 +486,7 @@ class DashChatState extends State<DashChat> {
             children: <Widget>[
               Column(
                 mainAxisAlignment: widget.shouldStartMessagesFromTop
-                    ? MainAxisAlignment.start
+                    ? MainAxisAlignment.spaceBetween
                     : MainAxisAlignment.end,
                 children: <Widget>[
                   MessageListView(
