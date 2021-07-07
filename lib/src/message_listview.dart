@@ -123,75 +123,75 @@ class _MessageListViewState extends State<MessageListView> {
             maxHeight: MediaQuery.of(context).size.height,
             maxWidth: MediaQuery.of(context).size.width);
     final itemCount = widget.messages.length;
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.start,
-      children: [
-        GestureDetector(
-          onTap: () {
-            final currentFocus = FocusScope.of(context);
-            if (!currentFocus.hasPrimaryFocus && currentFocus.hasFocus) {
-              FocusManager.instance.primaryFocus.unfocus();
-            }
-          },
-          child: Padding(
-            padding: widget.messageContainerPadding,
-            child: NotificationListener<ScrollNotification>(
-              onNotification: scrollNotificationFunc,
-              child: Stack(
-                alignment: AlignmentDirectional.topCenter,
-                children: [
-                  Container(
-                    color: Colors.red,
-                    child: ListView.builder(
-                      controller: widget.scrollController,
-                      physics: widget.scrollPhysics,
-                      keyboardDismissBehavior:
-                          ScrollViewKeyboardDismissBehavior.onDrag,
-                      shrinkWrap: false,
-                      reverse: widget.inverted,
-                      itemCount: itemCount,
-                      itemBuilder: (context, i) {
-                        bool showAvatar = shouldShowAvatar(i);
-                        bool first = i == 0;
-                        bool last = i == itemCount - 1;
+    return Flexible(
+      child: GestureDetector(
+        onTap: () {
+          final currentFocus = FocusScope.of(context);
+          if (!currentFocus.hasPrimaryFocus && currentFocus.hasFocus) {
+            FocusManager.instance.primaryFocus.unfocus();
+          }
+        },
+        child: Padding(
+          padding: widget.messageContainerPadding,
+          child: NotificationListener<ScrollNotification>(
+            onNotification: scrollNotificationFunc,
+            child: Stack(
+              alignment: AlignmentDirectional.topCenter,
+              children: [
+                Container(
+                  color: Colors.red,
+                  child: ListView.builder(
+                    controller: widget.scrollController,
+                    physics: widget.scrollPhysics,
+                    keyboardDismissBehavior:
+                        ScrollViewKeyboardDismissBehavior.onDrag,
+                    shrinkWrap: false,
+                    reverse: widget.inverted,
+                    itemCount: itemCount,
+                    itemBuilder: (context, i) {
+                      bool showAvatar = shouldShowAvatar(i);
+                      bool first = i == 0;
+                      bool last = i == itemCount - 1;
 
-                        DateTime currentDate = DateTime(
-                          widget.messages[i].createdAt.year,
-                          widget.messages[i].createdAt.month,
-                          widget.messages[i].createdAt.day,
+                      DateTime currentDate = DateTime(
+                        widget.messages[i].createdAt.year,
+                        widget.messages[i].createdAt.month,
+                        widget.messages[i].createdAt.day,
+                      );
+
+                      DateTime previousDate;
+                      if (i == 0) {
+                        previousDate = currentDate;
+                      } else {
+                        previousDate = DateTime(
+                          widget.messages[i - 1].createdAt.year,
+                          widget.messages[i - 1].createdAt.month,
+                          widget.messages[i - 1].createdAt.day,
                         );
-
-                        DateTime previousDate;
-                        if (i == 0) {
-                          previousDate = currentDate;
-                        } else {
-                          previousDate = DateTime(
-                            widget.messages[i - 1].createdAt.year,
-                            widget.messages[i - 1].createdAt.month,
-                            widget.messages[i - 1].createdAt.day,
-                          );
-                        }
-                        bool showCurrentDate = false;
-                        bool showPreviousDate = false;
-                        if (currentDate.difference(previousDate).inDays != 0) {
-                          if (widget.inverted) {
-                            showPreviousDate = true;
-                            if (last) {
-                              showCurrentDate = true;
-                            }
-                          } else {
+                      }
+                      bool showCurrentDate = false;
+                      bool showPreviousDate = false;
+                      if (currentDate.difference(previousDate).inDays != 0) {
+                        if (widget.inverted) {
+                          showPreviousDate = true;
+                          if (last) {
                             showCurrentDate = true;
-                            if (first) {
-                              showPreviousDate = true;
-                            }
                           }
-                        } else if (widget.inverted && last) {
+                        } else {
                           showCurrentDate = true;
-                        } else if (!widget.inverted && first) {
-                          showCurrentDate = true;
+                          if (first) {
+                            showPreviousDate = true;
+                          }
                         }
+                      } else if (widget.inverted && last) {
+                        showCurrentDate = true;
+                      } else if (!widget.inverted && first) {
+                        showCurrentDate = true;
+                      }
 
-                        return Align(
+                      return Container(
+                        color: Colors.blue,
+                        child: Align(
                           child: Column(
                             children: <Widget>[
                               if (showCurrentDate)
@@ -343,29 +343,29 @@ class _MessageListViewState extends State<MessageListView> {
                                 ),
                             ],
                           ),
-                        );
-                      },
-                    ),
+                        ),
+                      );
+                    },
                   ),
-                  Container(
-                    height: 100.0,
-                  ),
-                  AnimatedPositioned(
-                    top: widget.showLoadMore ? 8.0 : -50.0,
-                    duration: Duration(milliseconds: 200),
-                    child: widget.showLoadEarlierWidget != null
-                        ? widget.showLoadEarlierWidget()
-                        : LoadEarlierWidget(
-                            onLoadEarlier: widget.onLoadEarlier,
-                            defaultLoadCallback: widget.defaultLoadCallback,
-                          ),
-                  ),
-                ],
-              ),
+                ),
+                Container(
+                  height: 100.0,
+                ),
+                AnimatedPositioned(
+                  top: widget.showLoadMore ? 8.0 : -50.0,
+                  duration: Duration(milliseconds: 200),
+                  child: widget.showLoadEarlierWidget != null
+                      ? widget.showLoadEarlierWidget()
+                      : LoadEarlierWidget(
+                          onLoadEarlier: widget.onLoadEarlier,
+                          defaultLoadCallback: widget.defaultLoadCallback,
+                        ),
+                ),
+              ],
             ),
           ),
         ),
-      ],
+      ),
     );
   }
 }
