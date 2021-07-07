@@ -145,7 +145,7 @@ class _MessageListViewState extends State<MessageListView> {
                     physics: widget.scrollPhysics,
                     keyboardDismissBehavior:
                         ScrollViewKeyboardDismissBehavior.onDrag,
-                    shrinkWrap: false,
+                    shrinkWrap: true,
                     reverse: widget.inverted,
                     itemCount: itemCount,
                     itemBuilder: (context, i) {
