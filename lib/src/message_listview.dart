@@ -190,6 +190,17 @@ class _MessageListViewState extends State<MessageListView> {
                     return Align(
                       child: Column(
                         children: <Widget>[
+                          Container(
+                            height: 100,
+                            width: constraints.maxWidth,
+                            color: Colors.indigo,
+                            child: Text(
+                              'Image goes here',
+                              style: TextStyle(
+                                color: Colors.white,
+                              ),
+                            ),
+                          ),
                           if (showCurrentDate)
                             DateBuilder(
                               date: currentDate,
