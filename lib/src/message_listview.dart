@@ -138,6 +138,18 @@ class _MessageListViewState extends State<MessageListView> {
             child: Stack(
               alignment: AlignmentDirectional.topCenter,
               children: [
+                if (itemCount == 0)
+                  Container(
+                    height: 100,
+                    width: constraints.maxWidth,
+                    color: Colors.indigo,
+                    child: Text(
+                      'Image goes here',
+                      style: TextStyle(
+                        color: Colors.white,
+                      ),
+                    ),
+                  ),
                 ListView.builder(
                   controller: widget.scrollController,
                   physics: widget.scrollPhysics,
@@ -190,7 +202,7 @@ class _MessageListViewState extends State<MessageListView> {
                     return Align(
                       child: Column(
                         children: <Widget>[
-                          if (itemCount == 0 || first)
+                          if (last)
                             Container(
                               height: 100,
                               width: constraints.maxWidth,
