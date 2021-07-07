@@ -558,6 +558,10 @@ class DashChatState extends State<DashChat> {
                               ],
                             ),
                     ),
+                  Container(
+                    height: 100,
+                    color: Colors.red,
+                  ),
                   if (widget.chatFooterBuilder != null)
                     widget.chatFooterBuilder(),
                   if (!widget.readOnly)
