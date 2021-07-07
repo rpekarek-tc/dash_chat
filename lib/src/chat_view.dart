@@ -490,10 +490,15 @@ class DashChatState extends State<DashChat> {
                     : MainAxisAlignment.end,
                 children: <Widget>[
                   Container(
-                    height: 200,
+                    height: 300,
                     width: constraints.maxWidth,
                     color: Colors.indigo,
-                    child: Text('Image goes here'),
+                    child: Text(
+                      'Image goes here',
+                      style: TextStyle(
+                        color: Colors.white,
+                      ),
+                    ),
                   ),
                   MessageListView(
                       avatarMaxSize: widget.avatarMaxSize,
