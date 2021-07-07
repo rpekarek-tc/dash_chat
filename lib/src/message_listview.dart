@@ -123,7 +123,7 @@ class _MessageListViewState extends State<MessageListView> {
             maxHeight: MediaQuery.of(context).size.height,
             maxWidth: MediaQuery.of(context).size.width);
     final itemCount = widget.messages.length;
-    return Flexible(
+    return Expanded(
       child: GestureDetector(
         onTap: () {
           final currentFocus = FocusScope.of(context);
