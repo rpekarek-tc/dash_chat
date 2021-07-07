@@ -124,23 +124,23 @@ class _MessageListViewState extends State<MessageListView> {
             maxWidth: MediaQuery.of(context).size.width);
     final itemCount = widget.messages.length;
     return Flexible(
-      child: Container(
-        color: Colors.red,
-        child: GestureDetector(
-          onTap: () {
-            final currentFocus = FocusScope.of(context);
-            if (!currentFocus.hasPrimaryFocus && currentFocus.hasFocus) {
-              FocusManager.instance.primaryFocus.unfocus();
-            }
-          },
-          child: Padding(
-            padding: widget.messageContainerPadding,
-            child: NotificationListener<ScrollNotification>(
-              onNotification: scrollNotificationFunc,
-              child: Stack(
-                alignment: AlignmentDirectional.topCenter,
-                children: [
-                  ListView.builder(
+      child: GestureDetector(
+        onTap: () {
+          final currentFocus = FocusScope.of(context);
+          if (!currentFocus.hasPrimaryFocus && currentFocus.hasFocus) {
+            FocusManager.instance.primaryFocus.unfocus();
+          }
+        },
+        child: Padding(
+          padding: widget.messageContainerPadding,
+          child: NotificationListener<ScrollNotification>(
+            onNotification: scrollNotificationFunc,
+            child: Stack(
+              alignment: AlignmentDirectional.topCenter,
+              children: [
+                Container(
+                  color: Colors.red,
+                  child: ListView.builder(
                     controller: widget.scrollController,
                     physics: widget.scrollPhysics,
                     keyboardDismissBehavior:
@@ -340,21 +340,21 @@ class _MessageListViewState extends State<MessageListView> {
                       );
                     },
                   ),
-                  Container(
-                    height: 100.0,
-                  ),
-                  AnimatedPositioned(
-                    top: widget.showLoadMore ? 8.0 : -50.0,
-                    duration: Duration(milliseconds: 200),
-                    child: widget.showLoadEarlierWidget != null
-                        ? widget.showLoadEarlierWidget()
-                        : LoadEarlierWidget(
-                            onLoadEarlier: widget.onLoadEarlier,
-                            defaultLoadCallback: widget.defaultLoadCallback,
-                          ),
-                  ),
-                ],
-              ),
+                ),
+                Container(
+                  height: 100.0,
+                ),
+                AnimatedPositioned(
+                  top: widget.showLoadMore ? 8.0 : -50.0,
+                  duration: Duration(milliseconds: 200),
+                  child: widget.showLoadEarlierWidget != null
+                      ? widget.showLoadEarlierWidget()
+                      : LoadEarlierWidget(
+                          onLoadEarlier: widget.onLoadEarlier,
+                          defaultLoadCallback: widget.defaultLoadCallback,
+                        ),
+                ),
+              ],
             ),
           ),
         ),
