@@ -140,7 +140,7 @@ class _MessageListViewState extends State<MessageListView> {
             child: Stack(
               alignment: AlignmentDirectional.topCenter,
               children: [
-                if (widget.topOfMessagesWidget != null)
+                if (itemCount == 0 && widget.topOfMessagesWidget != null)
                   widget.topOfMessagesWidget,
                 ListView.builder(
                   controller: widget.scrollController,
@@ -194,8 +194,8 @@ class _MessageListViewState extends State<MessageListView> {
                     return Align(
                       child: Column(
                         children: <Widget>[
-                          // if (last && widget.topOfMessagesWidget != null)
-                          //   widget.topOfMessagesWidget,
+                          if (last && widget.topOfMessagesWidget != null)
+                            widget.topOfMessagesWidget,
                           if (showCurrentDate)
                             DateBuilder(
                               date: currentDate,
