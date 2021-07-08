@@ -120,7 +120,7 @@ class DashChat extends StatefulWidget {
   /// topOfMessagesWidget is the widget that will be placed above all messages
   /// at the top of the scroll. This widget will appear even if there are no
   /// messages yet.
-  final Image topOfMessagesWidget;
+  final Widget topOfMessagesWidget;
 
   /// messageBuilder will override the the default chat container which uses
   /// and you will need to build complete message Widget it will not accept
