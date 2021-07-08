@@ -117,6 +117,11 @@ class DashChat extends StatefulWidget {
   /// Should the messages be shown in reversed order.
   final bool inverted;
 
+  /// topOfMessagesWidget is the widget that will be placed above all messages
+  /// at the top of the scroll. This widget will appear even if there are no
+  /// messages yet.
+  final Image topOfMessagesWidget;
+
   /// messageBuilder will override the the default chat container which uses
   /// and you will need to build complete message Widget it will not accept
   /// and include any other builder functions.
@@ -341,6 +346,7 @@ class DashChat extends StatefulWidget {
     this.showAvatarForEveryMessage = false,
     this.showUserAvatar = false,
     this.inverted = false,
+    this.topOfMessagesWidget,
     this.maxInputLength,
     this.parsePatterns = const <MatchText>[],
     this.chatFooterBuilder,
@@ -507,6 +513,7 @@ class DashChatState extends State<DashChat> {
                       dateFormat: widget.dateFormat,
                       timeFormat: widget.timeFormat,
                       inverted: widget.inverted,
+                      topOfMessagesWidget: widget.topOfMessagesWidget,
                       showAvatarForEverMessage:
                           widget.showAvatarForEveryMessage,
                       onLongPressAvatar: widget.onLongPressAvatar,
