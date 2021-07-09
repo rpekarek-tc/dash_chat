@@ -12,7 +12,7 @@ class MessageListView extends StatefulWidget {
   final bool renderAvatarOnTop;
   final Function(ChatMessage) onLongPressMessage;
   final bool inverted;
-  final Widget topOfMessagesWidget;
+  final Widget Function() messageListHeaderBuilder;
   final Widget Function(ChatUser) avatarBuilder;
   final Widget Function(ChatMessage) messageBuilder;
   final Widget Function(String, [ChatMessage]) messageTextBuilder;
@@ -58,7 +58,7 @@ class MessageListView extends StatefulWidget {
     this.timeFormat,
     this.showAvatarForEverMessage,
     this.inverted,
-    this.topOfMessagesWidget,
+    this.messageListHeaderBuilder,
     this.onLongPressAvatar,
     this.onLongPressMessage,
     this.onPressAvatar,
@@ -140,8 +140,8 @@ class _MessageListViewState extends State<MessageListView> {
             child: Stack(
               alignment: AlignmentDirectional.topCenter,
               children: [
-                if (itemCount == 0 && widget.topOfMessagesWidget != null)
-                  widget.topOfMessagesWidget,
+                if (itemCount == 0 && widget.messageListHeaderBuilder != null)
+                  widget.messageListHeaderBuilder(),
                 ListView.builder(
                   controller: widget.scrollController,
                   physics: widget.scrollPhysics,
@@ -194,8 +194,8 @@ class _MessageListViewState extends State<MessageListView> {
                     return Align(
                       child: Column(
                         children: <Widget>[
-                          if (last && widget.topOfMessagesWidget != null)
-                            widget.topOfMessagesWidget,
+                          if (last && widget.messageListHeaderBuilder != null)
+                            widget.messageListHeaderBuilder(),
                           if (showCurrentDate)
                             DateBuilder(
                               date: currentDate,

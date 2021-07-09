@@ -117,11 +117,6 @@ class DashChat extends StatefulWidget {
   /// Should the messages be shown in reversed order.
   final bool inverted;
 
-  /// topOfMessagesWidget is the widget that will be placed above all messages
-  /// at the top of the scroll. This widget will appear even if there are no
-  /// messages yet.
-  final Widget topOfMessagesWidget;
-
   /// messageBuilder will override the the default chat container which uses
   /// and you will need to build complete message Widget it will not accept
   /// and include any other builder functions.
@@ -138,6 +133,11 @@ class DashChat extends StatefulWidget {
 
   /// dateBuilder will override the the default time text.
   final Widget Function(String) dateBuilder;
+
+  /// A Widget that will be shown at the top of the [MessageListView] like an
+  /// image or text you want above all the messages or above the input field
+  /// if no messages.
+  final Widget Function() messageListHeaderBuilder;
 
   /// A Widget that will be shown below the [MessageListView] like you can
   /// show a "tying..." at the end.
@@ -346,9 +346,9 @@ class DashChat extends StatefulWidget {
     this.showAvatarForEveryMessage = false,
     this.showUserAvatar = false,
     this.inverted = false,
-    this.topOfMessagesWidget,
     this.maxInputLength,
     this.parsePatterns = const <MatchText>[],
+    this.messageListHeaderBuilder,
     this.chatFooterBuilder,
     this.messageBuilder,
     this.inputFooterBuilder,
@@ -513,7 +513,7 @@ class DashChatState extends State<DashChat> {
                       dateFormat: widget.dateFormat,
                       timeFormat: widget.timeFormat,
                       inverted: widget.inverted,
-                      topOfMessagesWidget: widget.topOfMessagesWidget,
+                      messageListHeaderBuilder: widget.messageListHeaderBuilder,
                       showAvatarForEverMessage:
                           widget.showAvatarForEveryMessage,
                       onLongPressAvatar: widget.onLongPressAvatar,
