@@ -134,6 +134,11 @@ class DashChat extends StatefulWidget {
   /// dateBuilder will override the the default time text.
   final Widget Function(String) dateBuilder;
 
+  /// A Widget that will be shown at the top of the [MessageListView] like an
+  /// image or text you want above all the messages or above the input field
+  /// if no messages.
+  final Widget Function() messageListHeaderBuilder;
+
   /// A Widget that will be shown below the [MessageListView] like you can
   /// show a "tying..." at the end.
   final Widget Function() chatFooterBuilder;
@@ -343,6 +348,7 @@ class DashChat extends StatefulWidget {
     this.inverted = false,
     this.maxInputLength,
     this.parsePatterns = const <MatchText>[],
+    this.messageListHeaderBuilder,
     this.chatFooterBuilder,
     this.messageBuilder,
     this.inputFooterBuilder,
@@ -507,6 +513,7 @@ class DashChatState extends State<DashChat> {
                       dateFormat: widget.dateFormat,
                       timeFormat: widget.timeFormat,
                       inverted: widget.inverted,
+                      messageListHeaderBuilder: widget.messageListHeaderBuilder,
                       showAvatarForEverMessage:
                           widget.showAvatarForEveryMessage,
                       onLongPressAvatar: widget.onLongPressAvatar,
