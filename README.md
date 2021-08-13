@@ -1,7 +1,3 @@
-# This is Gloo's Fork of [Dash Chat](https://pub.dev/packages/dash_chat)
-Please see [our docs](https://www.notion.so/teamgloo/Dash-Chat-757e2737569a4573a98b76e76b3ff24d) for how to contribute.
-
----
 <p align="center">
   <h1 align="center" style="font-size: 48px;">⚠️ Dashchat v2 is available in v2 branch ⚠️</h1>
   <p align="center">You can open issues for the v2 to indicate things we need to implement/fix. Also the API can change until I am satisfied the way it is.</p>
