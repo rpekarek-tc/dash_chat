@@ -7,7 +7,7 @@ class ChatInputToolbar extends StatelessWidget {
   final TextCapitalization? textCapitalization;
   final BoxDecoration? inputContainerStyle;
   final List<Widget> leading;
-  final List<Widget> trailling;
+  final List<Widget> trailing;
   final int inputMaxLines;
   final int? maxInputLength;
   final bool alwaysShowSend;
@@ -44,7 +44,7 @@ class ChatInputToolbar extends StatelessWidget {
     this.inputDisabled = false,
     this.controller,
     this.leading = const [],
-    this.trailling = const [],
+    this.trailing = const [],
     this.inputDecoration,
     this.textCapitalization,
     this.inputTextStyle,
@@ -131,7 +131,7 @@ class ChatInputToolbar extends StatelessWidget {
                   ),
                 ),
               ),
-              if (showTraillingBeforeSend) ...trailling,
+              if (showTraillingBeforeSend) ...trailing,
               if (sendButtonBuilder != null)
                 sendButtonBuilder!(() async {
                   if (text!.length != 0) {
@@ -149,7 +149,7 @@ class ChatInputToolbar extends StatelessWidget {
                       ? () => _sendMessage(context, message)
                       : null,
                 ),
-              if (!showTraillingBeforeSend) ...trailling,
+              if (!showTraillingBeforeSend) ...trailing,
             ],
           ),
           if (inputFooterBuilder != null) inputFooterBuilder!()

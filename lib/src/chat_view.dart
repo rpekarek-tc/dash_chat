@@ -135,6 +135,11 @@ class DashChat extends StatefulWidget {
   /// dateBuilder will override the the default time text.
   final Widget Function(String)? dateBuilder;
 
+  /// A Widget that will be shown at the top of the [MessageListView] like an
+  /// image or text you want above all the messages or above the input field
+  /// if no messages.
+  final Widget Function()? messageListHeaderBuilder;
+
   /// A Widget that will be shown below the [MessageListView] like you can
   /// show a "tying..." at the end.
   final Widget Function()? chatFooterBuilder;
@@ -170,9 +175,6 @@ class DashChat extends StatefulWidget {
 
   /// Max length of the input lines default to 1.
   final int inputMaxLines;
-
-  /// Should the input cursor be shown defaults to true.
-  final bool showInputCursor;
 
   /// Width of the text input defaults to 2.0.
   final double inputCursorWidth;
@@ -211,7 +213,7 @@ class DashChat extends StatefulWidget {
   /// Should quick reply be horizontally scrollable
   final bool quickReplyScroll;
 
-  /// Should the [trailling] Widgets be shown before the send button
+  /// Should the [trailing] Widgets be shown before the send button
   /// As default it will be shown before the send button.
   final bool showTraillingBeforeSend;
 
@@ -274,7 +276,12 @@ class DashChat extends StatefulWidget {
   /// return BoxDecoration
   final BoxDecoration Function(ChatMessage, bool?)? messageDecorationBuilder;
 
-  late ScrollToBottomStyle scrollToBottomStyle;
+  ///overrides the default scroll physics of the chatview
+  ///
+  /// Defaults to `BouncingScrollPhysics`
+  final ScrollPhysics physics;
+
+  ScrollToBottomStyle scrollToBottomStyle;
 
   DashChat({
     Key? key,
@@ -304,8 +311,7 @@ class DashChat extends StatefulWidget {
     this.scrollController,
     this.inputCursorColor,
     this.inputCursorWidth = 2.0,
-    this.showInputCursor = true,
-    this.inputMaxLines = 1,
+    this.inputMaxLines = 10,
     this.inputContainerStyle,
     this.inputTextStyle,
     this.leading = const <Widget>[],
@@ -338,6 +344,7 @@ class DashChat extends StatefulWidget {
     this.inverted = false,
     this.maxInputLength,
     this.parsePatterns = const <MatchText>[],
+    this.messageListHeaderBuilder,
     this.chatFooterBuilder,
     this.messageBuilder,
     this.inputFooterBuilder,
@@ -352,9 +359,10 @@ class DashChat extends StatefulWidget {
     this.messagePadding = const EdgeInsets.all(8.0),
     this.textBeforeImage = true,
     this.messageDecorationBuilder,
-  }) : super(key: key) {
-    this.scrollToBottomStyle = scrollToBottomStyle ?? new ScrollToBottomStyle();
-  }
+    this.physics = const BouncingScrollPhysics(),
+  })  : this.scrollToBottomStyle =
+            scrollToBottomStyle ?? new ScrollToBottomStyle(),
+        super(key: key);
 
   String? getVal() {
     return text;
@@ -373,6 +381,7 @@ class DashChatState extends State<DashChat> {
   GlobalKey inputKey = GlobalKey();
   double height = 48.0;
   bool showLoadMore = false;
+
   String get messageInput => _text;
   bool _initialLoad = true;
   Timer? _timer;
@@ -381,6 +390,7 @@ class DashChatState extends State<DashChat> {
     if (visible) {
       changeVisible(false);
     }
+    widget.onTextChange?.call(text);
     setState(() {
       this._text = text;
     });
@@ -496,10 +506,11 @@ class DashChatState extends State<DashChat> {
                           : scrollController,
                       user: widget.user,
                       messages: widget.messages,
-                      showuserAvatar: widget.showUserAvatar,
+                      showUserAvatar: widget.showUserAvatar,
                       dateFormat: widget.dateFormat,
                       timeFormat: widget.timeFormat,
                       inverted: widget.inverted,
+                      messageListHeaderBuilder: widget.messageListHeaderBuilder,
                       showAvatarForEverMessage:
                           widget.showAvatarForEveryMessage,
                       onLongPressAvatar: widget.onLongPressAvatar,
@@ -574,18 +585,15 @@ class DashChatState extends State<DashChat> {
                         maxInputLength: widget.maxInputLength,
                         sendButtonBuilder: widget.sendButtonBuilder,
                         text: widget.text != null ? widget.text : _text,
-                        onTextChange: widget.onTextChange != null
-                            ? widget.onTextChange
-                            : onTextChange,
+                        onTextChange: onTextChange,
                         inputDisabled: widget.inputDisabled,
                         leading: widget.leading,
-                        trailling: widget.trailing,
+                        trailing: widget.trailing,
                         inputContainerStyle: widget.inputContainerStyle,
                         inputTextStyle: widget.inputTextStyle,
                         inputFooterBuilder: widget.inputFooterBuilder,
                         inputCursorColor: widget.inputCursorColor,
                         inputCursorWidth: widget.inputCursorWidth,
-                        showInputCursor: widget.showInputCursor,
                         alwaysShowSend: widget.alwaysShowSend,
                         scrollController: widget.scrollController != null
                             ? widget.scrollController
