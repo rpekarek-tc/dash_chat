@@ -104,6 +104,8 @@ class ChatInputToolbar extends StatelessWidget {
                         }
                       },
                       textInputAction: textInputAction,
+                      enableInteractiveSelection: true,
+                      keyboardAppearance: Brightness.light,
                       buildCounter: (
                         BuildContext context, {
                         int? currentLength,
