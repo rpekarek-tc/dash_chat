@@ -484,6 +484,7 @@ class DashChatState extends State<DashChat> {
         return Container(
           height: widget.height != null ? widget.height : maxHeight,
           width: widget.width != null ? widget.width : maxWidth,
+          color: Colors.transparent,
           child: Stack(
             children: <Widget>[
               Column(
@@ -566,47 +567,43 @@ class DashChatState extends State<DashChat> {
                   if (widget.chatFooterBuilder != null)
                     widget.chatFooterBuilder!(),
                   if (!widget.readOnly)
-                    Container(
-                      color: Colors.transparent,
-                      child: SafeArea(
-                        child: ChatInputToolbar(
-                          key: inputKey,
-                          brightness: MediaQuery.of(context).platformBrightness,
-                          sendOnEnter: widget.sendOnEnter,
-                          textInputAction: widget.textInputAction,
-                          inputToolbarPadding: widget.inputToolbarPadding,
-                          textDirection: widget.inputTextDirection,
-                          inputToolbarMargin: widget.inputToolbarMargin,
-                          showTraillingBeforeSend:
-                              widget.showTraillingBeforeSend,
-                          inputMaxLines: widget.inputMaxLines,
-                          controller: textController,
-                          inputDecoration: widget.inputDecoration,
-                          textCapitalization: widget.textCapitalization,
-                          onSend: widget.onSend,
-                          user: widget.user,
-                          messageIdGenerator: widget.messageIdGenerator,
-                          maxInputLength: widget.maxInputLength,
-                          sendButtonBuilder: widget.sendButtonBuilder,
-                          text: widget.text != null ? widget.text : _text,
-                          onTextChange: onTextChange,
-                          inputDisabled: widget.inputDisabled,
-                          leading: widget.leading,
-                          trailing: widget.trailing,
-                          inputContainerStyle: widget.inputContainerStyle,
-                          inputTextStyle: widget.inputTextStyle,
-                          inputFooterBuilder: widget.inputFooterBuilder,
-                          inputCursorColor: widget.inputCursorColor,
-                          inputCursorWidth: widget.inputCursorWidth,
-                          alwaysShowSend: widget.alwaysShowSend,
-                          scrollController: widget.scrollController != null
-                              ? widget.scrollController
-                              : scrollController,
-                          focusNode: inputFocusNode,
-                          reverse: widget.inverted,
-                        ),
+                    SafeArea(
+                      child: ChatInputToolbar(
+                        key: inputKey,
+                        brightness: MediaQuery.of(context).platformBrightness,
+                        sendOnEnter: widget.sendOnEnter,
+                        textInputAction: widget.textInputAction,
+                        inputToolbarPadding: widget.inputToolbarPadding,
+                        textDirection: widget.inputTextDirection,
+                        inputToolbarMargin: widget.inputToolbarMargin,
+                        showTraillingBeforeSend: widget.showTraillingBeforeSend,
+                        inputMaxLines: widget.inputMaxLines,
+                        controller: textController,
+                        inputDecoration: widget.inputDecoration,
+                        textCapitalization: widget.textCapitalization,
+                        onSend: widget.onSend,
+                        user: widget.user,
+                        messageIdGenerator: widget.messageIdGenerator,
+                        maxInputLength: widget.maxInputLength,
+                        sendButtonBuilder: widget.sendButtonBuilder,
+                        text: widget.text != null ? widget.text : _text,
+                        onTextChange: onTextChange,
+                        inputDisabled: widget.inputDisabled,
+                        leading: widget.leading,
+                        trailing: widget.trailing,
+                        inputContainerStyle: widget.inputContainerStyle,
+                        inputTextStyle: widget.inputTextStyle,
+                        inputFooterBuilder: widget.inputFooterBuilder,
+                        inputCursorColor: widget.inputCursorColor,
+                        inputCursorWidth: widget.inputCursorWidth,
+                        alwaysShowSend: widget.alwaysShowSend,
+                        scrollController: widget.scrollController != null
+                            ? widget.scrollController
+                            : scrollController,
+                        focusNode: inputFocusNode,
+                        reverse: widget.inverted,
                       ),
-                    ),
+                    )
                 ],
               ),
               if (visible && !_initialLoad)
