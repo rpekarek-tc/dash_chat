@@ -484,6 +484,7 @@ class DashChatState extends State<DashChat> {
         return Container(
           height: widget.height != null ? widget.height : maxHeight,
           width: widget.width != null ? widget.width : maxWidth,
+          color: Colors.transparent,
           child: Stack(
             children: <Widget>[
               Column(
