@@ -31,6 +31,7 @@ class ChatInputToolbar extends StatelessWidget {
   final bool sendOnEnter;
   final bool reverse;
   final TextInputAction? textInputAction;
+  final Brightness brightness;
 
   ChatInputToolbar({
     Key? key,
@@ -64,6 +65,7 @@ class ChatInputToolbar extends StatelessWidget {
     this.showTraillingBeforeSend = true,
     this.inputToolbarPadding = const EdgeInsets.all(0.0),
     this.inputToolbarMargin = const EdgeInsets.all(0.0),
+    this.brightness = Brightness.light,
   }) : super(key: key);
 
   @override
@@ -80,7 +82,7 @@ class ChatInputToolbar extends StatelessWidget {
       margin: inputToolbarMargin,
       decoration: inputContainerStyle != null
           ? inputContainerStyle
-          : BoxDecoration(color: Colors.white),
+          : BoxDecoration(color: Colors.transparent),
       child: Column(
         children: <Widget>[
           Row(
@@ -105,7 +107,7 @@ class ChatInputToolbar extends StatelessWidget {
                       },
                       textInputAction: textInputAction,
                       enableInteractiveSelection: true,
-                      keyboardAppearance: Brightness.light,
+                      keyboardAppearance: brightness,
                       buildCounter: (
                         BuildContext context, {
                         int? currentLength,
@@ -117,7 +119,9 @@ class ChatInputToolbar extends StatelessWidget {
                           ? inputDecoration
                           : InputDecoration.collapsed(
                               hintText: "",
-                              fillColor: Colors.white,
+                              fillColor: brightness == Brightness.light
+                                  ? Colors.white
+                                  : Colors.transparent,
                             ),
                       textCapitalization: textCapitalization!,
                       controller: controller,

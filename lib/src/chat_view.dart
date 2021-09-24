@@ -569,6 +569,7 @@ class DashChatState extends State<DashChat> {
                     SafeArea(
                       child: ChatInputToolbar(
                         key: inputKey,
+                        brightness: MediaQuery.of(context).platformBrightness,
                         sendOnEnter: widget.sendOnEnter,
                         textInputAction: widget.textInputAction,
                         inputToolbarPadding: widget.inputToolbarPadding,
