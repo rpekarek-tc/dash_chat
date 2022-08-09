@@ -104,7 +104,7 @@ class MessageContainer extends StatelessWidget {
             BoxDecoration(
               color: message.user.containerColor ??
                   (isUser
-                      ? Theme.of(context).accentColor
+                      ? Theme.of(context).colorScheme.secondary
                       : Color.fromRGBO(225, 225, 225, 1)),
               borderRadius: BorderRadius.circular(5.0),
             ),

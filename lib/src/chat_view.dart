@@ -281,7 +281,7 @@ class DashChat extends StatefulWidget {
   /// Defaults to `BouncingScrollPhysics`
   final ScrollPhysics physics;
 
-  ScrollToBottomStyle scrollToBottomStyle;
+  final ScrollToBottomStyle scrollToBottomStyle;
 
   DashChat({
     Key? key,
@@ -415,7 +415,7 @@ class DashChatState extends State<DashChat> {
     scrollController = widget.scrollController ?? ScrollController();
     textController = widget.textController ?? TextEditingController();
     inputFocusNode = widget.focusNode ?? FocusNode();
-    WidgetsBinding.instance!.addPostFrameCallback(widgetBuilt);
+    WidgetsBinding.instance.addPostFrameCallback(widgetBuilt);
     super.initState();
   }
 
